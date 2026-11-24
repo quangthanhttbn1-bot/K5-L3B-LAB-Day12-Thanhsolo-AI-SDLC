@@ -5,11 +5,13 @@
 ## Lệnh
 - Test: `PYTHONPATH=tests:. python3 -m unittest discover -s tests -v`
 - Headless: `python3 -m chonoi.headless --mode gather|quan --seed 1 --ticks 600 --out out.jsonl`
+- Bằng chứng Phase 1: `python3 docs/proof/phase-1/run_proof.py` (ghi `events.txt`)
+- Windows: `$env:PYTHONPATH="tests;."`, dùng `python`; nếu `python3` là alias Store (mã 9009) thì test hộp đen hỏng: chạy trên bản sao có `headless_cmd` = `python`, không commit thay đổi đó.
 - Chơi thử trên trình duyệt: `python3 -m chonoi.live --mode gather|quan` (mở địa chỉ in ra; WASD, E, Space, R)
 
 ## Cấu trúc & quy ước
 - (Starter Python là TÙY CHỌN; nhóm có thể dùng ngôn ngữ khác nếu giữ Test Contract.) Khung do giảng viên cấp: `chonoi/{headless,inputs,scenario,contract,rng,ids,jsonl,inventory,runner,live}.py` và `chonoi/web/`. Hạn chế sửa; nếu phải sửa thì báo cả nhóm và ghi lại lý do.
-- Luật chơi của nhóm: `chonoi/sim/gather.py`, `chonoi/sim/quan.py` (tìm `TODO(nhóm)`).
+- Luật chơi của nhóm: `chonoi/sim/gather.py`, `chonoi/sim/quan.py` ; test luật: `tests/test_rules_p1.py`. Giả định chưa có PRD: `docs/clarify.md`.
 - **Số liệu chỉ đọc từ `game.contract.json` / dữ liệu**, không hard-code trong luật.
 - Mọi số ngẫu nhiên đi qua `Streams` (`chonoi/rng.py`); không dùng `random` toàn cục, không dùng đồng hồ hệ thống.
 - Sắp danh sách thực thể bằng `ids.sort_by_id`; cấp id bằng `IdAllocator`.
