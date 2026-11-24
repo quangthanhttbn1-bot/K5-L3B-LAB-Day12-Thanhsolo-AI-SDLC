@@ -1,0 +1,25 @@
+== gather (seed 1) — hai lần giống từng byte: True
+{"type":"event","tick":636,"phase":"gather","name":"gather","data":{"node_id":"N3","kind":"bong_sung","count":1}}
+{"type":"event","tick":876,"phase":"gather","name":"gather","data":{"node_id":"N4","kind":"bong_sung","count":1}}
+{"type":"event","tick":1751,"phase":"gather","name":"gather_end","data":{"reason":"docked","inventory":{"items":{"bong_sung":2}}}}
+{"type":"end","ticks":1751,"sim_tick":1751,"mode":"gather","state":"finished","reason":"docked","money":0,"earned":0,"reputation":3.0,"score":300}
+kho.json: {"items":{"bong_sung":2}}
+== quan (seed 1) — hai lần giống từng byte: True
+{"type":"event","tick":120,"phase":"quan","name":"customer_arrived","data":{"customer_id":"C1","table_id":"T1","dish_id":"goi_bong_sung"}}
+{"type":"event","tick":126,"phase":"quan","name":"cook_started","data":{"stove_id":"B1","dish_id":"goi_bong_sung","customer_id":"C1"}}
+{"type":"event","tick":366,"phase":"quan","name":"dish_ready","data":{"stove_id":"B1","dish_id":"goi_bong_sung"}}
+{"type":"event","tick":381,"phase":"quan","name":"dish_picked","data":{"stove_id":"B1","dish_id":"goi_bong_sung"}}
+{"type":"event","tick":526,"phase":"quan","name":"served","data":{"customer_id":"C1","table_id":"T1","dish_id":"goi_bong_sung"}}
+{"type":"event","tick":1126,"phase":"quan","name":"paid","data":{"customer_id":"C1","table_id":"T1","dish_id":"goi_bong_sung","price":40,"tip":8}}
+{"type":"event","tick":1920,"phase":"quan","name":"no_dish","data":{}}
+{"type":"event","tick":2820,"phase":"quan","name":"no_dish","data":{}}
+{"type":"event","tick":3720,"phase":"quan","name":"no_dish","data":{}}
+{"type":"event","tick":4620,"phase":"quan","name":"no_dish","data":{}}
+{"type":"event","tick":5520,"phase":"quan","name":"no_dish","data":{}}
+{"type":"event","tick":6420,"phase":"quan","name":"no_dish","data":{}}
+{"type":"event","tick":7320,"phase":"quan","name":"no_dish","data":{}}
+{"type":"event","tick":8220,"phase":"quan","name":"no_dish","data":{}}
+{"type":"event","tick":9120,"phase":"quan","name":"no_dish","data":{}}
+{"type":"event","tick":10020,"phase":"quan","name":"no_dish","data":{}}
+{"type":"event","tick":10800,"phase":"quan","name":"quan_end","data":{"reason":"time","money":48,"earned":48,"shift_earned":48,"reputation":3.2}}
+{"type":"end","ticks":10800,"sim_tick":10800,"mode":"quan","state":"finished","reason":"time","money":48,"earned":48,"reputation":3.2,"score":348}

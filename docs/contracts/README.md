@@ -1,7 +1,7 @@
 # Hợp đồng tích hợp — contract v1.0
 
 Chốt theo khung `chonoi/` và `tests/test_smoke_p1.py`, **trước khi đọc PRD-0**. Ký hiệu:
-**[chốt]** = code/test trong repo đã thể hiện; **[chờ PRD]** = chưa có nguồn, không đoán, điền khi mở đề.
+**[chốt]** = code/test trong repo đã thể hiện; **[chờ PRD]** = chưa có nguồn, không đoán, điền khi mở đề; **[giả định]** = code đang dùng, chưa đối chiếu PRD-0 (xem `docs/clarify.md`).
 PRD-0 khác bảng này thì **theo PRD-0**, sửa file này và ghi lý do trong commit hoặc `docs/adr/`.
 
 ## 1. File kho [chốt]
@@ -47,7 +47,9 @@ Sim không đọc đồng hồ thật. Headless và live cùng dùng `runner.Ses
 | `quan` | `player{pos}`, `stock`, `hand`, `stoves[]{id, pos, state, dish, cook_ticks_left, ready_ticks}`, `tables[]{id, pos, customer_id}`, `customers[]` |
 
 Mảng thực thể xếp bằng `sort_by_id`. UI hiện đọc ở khách: `id`, `table_id`, `state`, `dish_id`, `patience_ticks_left`.
-**[chờ PRD]**: đủ trường và các giá trị `state` của khách; kiểu của `hand` (UI tạm nhận chuỗi hoặc `{dish_id}`).
+**[giả định]** Khách: `{id, table_id, state: waiting|eating, order_state: pending|assigned|served, dish_id, patience_ticks_left, eat_ticks_left, reserved, price, tip}`. `hand`: chuỗi id món hoặc `null` (scenario nhận thêm `{dish_id}`).
+
+**Đổi 1 (Phase 1):** thay `[chờ PRD]` bằng `[giả định]` vì code cần giá trị cụ thể mà PRD-0 chưa đọc được.
 
 ## 3. Sự kiện
 
@@ -57,16 +59,18 @@ headless ghi ra JSONL (test đọc), live đưa vào `events` (UI chỉ hiển t
 | Phát | Tên | `data` | Khi nào |
 |---|---|---|---|
 | gather | `node_regrown` | `{node_id}` [chốt] | `regrow_ticks` về 0 |
-| gather | `gather_end` | `{reason, inventory:{items}}` [chốt] | `reason`: `docked`, `time`, `fainted` (`fainted`: luật chưa viết) |
-| gather | `dive`, `surface` | `pos` theo TODO trong khung; định dạng [chờ PRD] | Đổi phân vùng dưới nước / mặt nước |
-| gather | `oxygen_empty` | [chờ PRD] | Oxy từ dương xuống 0 |
-| gather | `choke` | [chờ PRD] | Đủ `choke_interval_ticks` ngạt, -1 Máu |
-| gather | `faint` | [chờ PRD] | Máu về 0, phát trước `gather_end` |
-| gather | `gather` | [chờ PRD] | Hái nút ở mặt nước |
-| gather | `fish_caught` | [chờ PRD] | Bắt được đàn cá |
-| gather | `hold_full` | [chờ PRD] | Giỏ đầy khi hái hoặc bắt |
+| gather | `gather_end` | `{reason, inventory:{items}}` [chốt] | `reason`: `docked`, `time`, `fainted` |
+| gather | `dive`, `surface` | `{pos}` [giả định định dạng] | Đổi phân vùng dưới nước / mặt nước |
+| gather | `oxygen_empty` | `{pos}` [giả định] | Oxy từ dương xuống 0 |
+| gather | `choke` | `{hp}` [giả định] | Đủ `choke_interval_ticks` ngạt, -1 Máu |
+| gather | `faint` | `{pos}` [giả định] | Máu về 0, phát trước `gather_end` |
+| gather | `gather` | `{node_id, kind, count}` [giả định] | Hái nút ở mặt nước |
+| gather | `fish_caught` | `{fish_id, kind, count}` [giả định] | Bắt được đàn cá |
+| gather | `hold_full` | `{node_id hoặc fish_id, kind}` [giả định] | Có phần không vừa giỏ |
 | quan | `quan_end` | `{reason, money, earned, shift_earned, reputation}` [chốt] | Hết ca (`reason`: `time`) |
-| quan | `cook_started`, `dish_ready`, `dish_picked`, `served`, `paid` | [chờ PRD] | Nấu → chín → bưng → phục vụ → trả tiền |
-| quan | `customer_left`, `no_dish` | [chờ PRD] | Khách bỏ đi / không có món nấu được |
-
-Tên sự kiện chưa có `data` lấy từ TODO trong `chonoi/sim/`; tên sự kiện khách đến (nếu có) [chờ PRD].
+| quan | `customer_arrived` | `{customer_id, table_id, dish_id}` [giả định cả tên] | Khách ngồi vào bàn |
+| quan | `no_dish` | `{}` [giả định] | Đến lượt khách nhưng không món nào đủ nguyên liệu |
+| quan | `cook_started` | `{stove_id, dish_id, customer_id}` [giả định] | Bắt đầu nấu, trừ kho |
+| quan | `dish_ready`, `dish_picked` | `{stove_id, dish_id}` [giả định] | Chín / lấy lên tay |
+| quan | `served`, `customer_left` | `{customer_id, table_id, dish_id}` [giả định] | Phục vụ / hết kiên nhẫn |
+| quan | `paid` | `{customer_id, table_id, dish_id, price, tip}` [giả định] | Ăn xong trả tiền |
